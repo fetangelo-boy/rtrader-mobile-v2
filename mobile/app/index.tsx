@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuthStore } from './store/auth';
+import { socketService } from './services/socket';
 
 export default function RootLayout() {
   const router = useRouter();
@@ -17,8 +18,10 @@ export default function RootLayout() {
   useEffect(() => {
     if (!isLoading) {
       if (isAuthenticated) {
+        socketService.connect();
         router.replace('/(tabs)');
       } else {
+        socketService.disconnect();
         router.replace('/auth/login');
       }
     }
